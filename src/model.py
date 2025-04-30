@@ -242,8 +242,27 @@ class CaptchaModel:
         Args:
             filepath (str): Путь к файлу модели
         """
-        self.model = tf.keras.models.load_model(filepath)
-        print(f"Модель загружена из {filepath}")
+        try:
+            # Пробуем загрузить модель с обработкой кастомных объектов
+            self.model = tf.keras.models.load_model(
+                filepath,
+                custom_objects=None,  # Здесь можно добавить кастомные слои если они есть
+                compile=True,
+                options=tf.saved_model.LoadOptions(experimental_io_device='/job:localhost')
+            )
+            print(f"Модель успешно загружена из {filepath}")
+        except Exception as e:
+            print(f"Ошибка при загрузке модели: {str(e)}")
+            try:
+                # Пробуем альтернативный способ загрузки
+                print("Пробуем альтернативный способ загрузки...")
+                # Создаем новую модель с той же архитектурой
+                self.build_model()
+                # Загружаем только веса
+                self.model.load_weights(filepath)
+                print(f"Веса модели успешно загружены из {filepath}")
+            except Exception as e2:
+                raise ValueError(f"Не удалось загрузить модель: {str(e)}\nОшибка при альтернативной загрузке: {str(e2)}")
 
 
 def main():

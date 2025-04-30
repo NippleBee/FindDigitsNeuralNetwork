@@ -13,9 +13,9 @@ import shutil
 class CaptchaGenerator:
     """Генератор капч с 5 цифрами в прямоугольном стиле"""
     
-    def __init__(self, width=150, height=50, bg_color_base=(117, 157, 163), # #759da3
+    def __init__(self, width=200, height=80, bg_color_base=(117, 157, 163), # #759da3
                  text_color_base=(26, 36, 50), # #1a2432
-                 digit_size=(18, 30), noise_level=0.0):
+                 digit_size=(30, 70), noise_level=0.0):
         """
         Примечание: Цвета подобраны на основе примеров изображений:
         - Фон: голубовато-серый
@@ -28,15 +28,16 @@ class CaptchaGenerator:
             height (int): Высота изображения
             bg_color_base (tuple): Базовый цвет фона (RGB)
             text_color_base (tuple): Базовый цвет текста (RGB)
-            digit_size (tuple): Размер цифры (ширина, высота)
+            digit_size (tuple): Базовый размер цифры (ширина, высота)
             noise_level (float): Уровень шума (0-1)
         """
         self.width = width
         self.height = height
         self.bg_color_base = bg_color_base
         self.text_color_base = text_color_base
-        self.digit_size = digit_size
+        self.base_digit_size = digit_size
         self.noise_level = noise_level
+        self.line_thicknesses = [1, 1.5, 2]  # Варианты толщины линий
         
         # Определяем шаблоны для рисования цифр в прямоугольном стиле, как на примерах
         self.digit_patterns = {
@@ -50,13 +51,13 @@ class CaptchaGenerator:
                 [1, 1, 1, 1, 1]
             ],
             '1': [
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0],
-                [0, 1, 1, 0, 0]
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0]
             ],
             '2': [
                 [1, 1, 1, 1, 1],
@@ -196,31 +197,55 @@ class CaptchaGenerator:
             digit (str): Цифра для отрисовки (0-9)
             position (tuple): Позиция (x, y) для отрисовки
             color (tuple): Цвет цифры (RGB)
+            
+        Returns:
+            int: Высота отрисованной цифры
         """
         pattern = self.digit_patterns[digit]
-        width, height = self.digit_size
+        base_width, base_height = self.base_digit_size
+        
+        # Случайная высота для цифры (±15% от базовой высоты)
+        height_variation = random.uniform(-0.15, 0.15)
+        digit_height = int(base_height * (1 + height_variation))
+        
+        # Используем базовую ширину
+        digit_width = base_width
+        
         x, y = position
         
         # Размер одного блока
-        block_width = width / 5
-        block_height = height / 7
+        block_width = digit_width / 5
+        block_height = digit_height / 7
+        
+        # Случайная толщина линий для этой цифры
+        thickness = random.choice(self.line_thicknesses)
         
         # Рисуем цифру по шаблону
         for row_idx, row in enumerate(pattern):
             for col_idx, cell in enumerate(row):
                 if cell == 1:
-                    # Рассчитываем координаты блока
+                    # Рассчитываем координаты блока с учетом толщины
                     block_x = x + col_idx * block_width
                     block_y = y + row_idx * block_height
                     
-                    # Рисуем прямоугольный блок
+                    # Увеличиваем размер блока на толщину линии
+                    adjusted_width = block_width * thickness
+                    adjusted_height = block_height * thickness
+                    
+                    # Центрируем увеличенный блок
+                    offset_x = (adjusted_width - block_width) / 2
+                    offset_y = (adjusted_height - block_height) / 2
+                    
+                    # Рисуем прямоугольный блок с учетом толщины
                     draw.rectangle(
                         [
-                            (block_x, block_y),
-                            (block_x + block_width, block_y + block_height)
+                            (block_x - offset_x, block_y - offset_y),
+                            (block_x - offset_x + adjusted_width, block_y - offset_y + adjusted_height)
                         ],
                         fill=color
                     )
+        
+        return digit_height
     
     def generate_captcha(self):
         """Генерирует одно изображение капчи с 5 случайными цифрами в прямоугольном стиле
@@ -237,7 +262,7 @@ class CaptchaGenerator:
         draw = ImageDraw.Draw(image)
         
         # Рассчитываем позиции для цифр
-        digit_width, digit_height = self.digit_size
+        digit_width, base_height = self.base_digit_size
         spacing = (self.width - (5 * digit_width)) // 6  # Равномерное распределение
         
         # Рисуем каждую цифру
@@ -250,9 +275,11 @@ class CaptchaGenerator:
             
             # Позиция для текущей цифры
             x = spacing + i * (digit_width + spacing)
-            y = (self.height - digit_height) // 2 + y_offset
             
-            # Рисуем цифру в прямоугольном стиле
+            # Вычисляем вертикальное положение
+            y = (self.height - base_height) // 2 + y_offset
+            
+            # Рисуем цифру в правильной позиции
             self._draw_digit(draw, digit, (x, y), text_color)
         
         # Добавляем шум и трансформации
