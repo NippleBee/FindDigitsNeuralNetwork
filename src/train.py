@@ -98,7 +98,7 @@ def train_model(args):
     )
     
     # Сохраняем модель
-    model_path = os.path.join(args.model_dir, 'final_model.h5')
+    model_path = os.path.join(args.model_dir, 'final_model.keras')
     model.save_model(model_path)
     
     # Визуализируем историю обучения
@@ -170,7 +170,7 @@ def main():
     # Параметры датасета
     parser.add_argument('--dataset_dir', type=str, default='dataset',
                         help='Директория с датасетом')
-    parser.add_argument('--num_samples', type=int, default=10000,
+    parser.add_argument('--num_samples', type=int, default=20000,
                         help='Количество изображений для генерации (если датасет не существует)')
     parser.add_argument('--grayscale', action='store_true',
                         help='Использовать оттенки серого вместо RGB')

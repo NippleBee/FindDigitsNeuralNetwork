@@ -13,9 +13,9 @@ import shutil
 class CaptchaGenerator:
     """Генератор капч с 5 цифрами в прямоугольном стиле"""
     
-    def __init__(self, width=200, height=80, bg_color_base=(117, 157, 163), # #759da3
+    def __init__(self, width=220, height=90, bg_color_base=(117, 157, 163), # #759da3
                  text_color_base=(26, 36, 50), # #1a2432
-                 digit_size=(30, 70), noise_level=0.0):
+                 digit_size=(35, 70), noise_level=0.0):
         """
         Примечание: Цвета подобраны на основе примеров изображений:
         - Фон: голубовато-серый
@@ -37,7 +37,7 @@ class CaptchaGenerator:
         self.text_color_base = text_color_base
         self.base_digit_size = digit_size
         self.noise_level = noise_level
-        self.line_thicknesses = [1, 1.5, 2]  # Варианты толщины линий
+        self.line_thicknesses = [1, 1.25, 1.5]  # Варианты толщины линий
         
         # Определяем шаблоны для рисования цифр в прямоугольном стиле, как на примерах
         self.digit_patterns = {
@@ -205,7 +205,7 @@ class CaptchaGenerator:
         base_width, base_height = self.base_digit_size
         
         # Случайная высота для цифры (±15% от базовой высоты)
-        height_variation = random.uniform(-0.15, 0.15)
+        height_variation = random.uniform(-0.1, 0.1)
         digit_height = int(base_height * (1 + height_variation))
         
         # Используем базовую ширину

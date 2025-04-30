@@ -277,7 +277,7 @@ def main():
                         help='Оценить модель на тестовом датасете')
     parser.add_argument('--predict', type=str, default=None,
                         help='Путь к изображению для распознавания')
-    parser.add_argument('--model_path', type=str, default='models/best_model.h5',
+    parser.add_argument('--model_path', type=str, default='models/best_model.keras',
                         help='Путь к файлу модели')
     parser.add_argument('--dataset_dir', type=str, default='dataset',
                         help='Директория с датасетом')
