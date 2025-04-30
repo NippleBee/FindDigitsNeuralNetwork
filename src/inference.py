@@ -192,7 +192,7 @@ def main():
                         help='Режим работы: predict - распознавание одного изображения, evaluate - оценка на тестовом датасете')
     
     # Параметры модели
-    parser.add_argument('--model_path', type=str, default='models/best_model.h5',
+    parser.add_argument('--model_path', type=str, default='models/best_model.keras',
                         help='Путь к файлу модели')
     parser.add_argument('--grayscale', action='store_true',
                         help='Использовать оттенки серого вместо RGB')
