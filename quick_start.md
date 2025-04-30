@@ -64,13 +64,13 @@ python src/train.py --dataset_dir dataset --model_dir models --epochs 50 --batch
 ### 4.3. Оценка модели
 
 ```bash
-python src/inference.py --mode evaluate --model_path models/best_model.h5 --test_dir dataset/test
+python src/inference.py --mode evaluate --model_path models/best_model.keras --test_dir dataset/test
 ```
 
 ### 4.4. Распознавание одного изображения
 
 ```bash
-python src/inference.py --mode predict --model_path models/best_model.h5 --image_path path/to/captcha.png
+python src/inference.py --mode predict --model_path models/best_model.keras --image_path path/to/captcha.png
 ```
 
 ## 5. Советы по оптимизации

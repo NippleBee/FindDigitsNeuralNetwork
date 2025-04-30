@@ -55,7 +55,7 @@ def run_pipeline(args):
         from model import CaptchaModel
         
         # Загружаем модель
-        model_path = args.model_path or os.path.join(args.model_dir, 'best_model.h5')
+        model_path = args.model_path or os.path.join(args.model_dir, 'best_model.keras')
         print(f"Загружаем модель из {model_path}...")
         
         model = CaptchaModel(grayscale=args.grayscale)
@@ -73,7 +73,7 @@ def run_pipeline(args):
         
         # Загружаем модель, если еще не загружена
         if 'model' not in locals():
-            model_path = args.model_path or os.path.join(args.model_dir, 'best_model.h5')
+            model_path = args.model_path or os.path.join(args.model_dir, 'best_model.keras')
             print(f"Загружаем модель из {model_path}...")
             
             model = CaptchaModel(grayscale=args.grayscale)
@@ -125,7 +125,7 @@ def main():
     parser.add_argument('--evaluate_model', action='store_true',
                         help='Оценивать модель')
     parser.add_argument('--model_path', type=str, default=None,
-                        help='Путь к файлу модели (если не указан, используется best_model.h5 из model_dir)')
+                        help='Путь к файлу модели (если не указан, используется best_model.keras из model_dir)')
     
     # Параметры для инференса
     parser.add_argument('--test_image', type=str, default=None,

@@ -48,11 +48,11 @@ python src/train.py --dataset_dir dataset --model_dir models
 ## Оценка модели
 
 ```
-python src/evaluate.py --model_path models/best_model.h5 --test_dir dataset/test
+python src/evaluate.py --model_path models/best_model.keras --test_dir dataset/test
 ```
 
 ## Инференс
 
 ```
-python src/inference.py --model_path models/best_model.h5 --image_path path/to/captcha.png
+python src/inference.py --model_path models/best_model.keras --image_path path/to/captcha.png
 ```

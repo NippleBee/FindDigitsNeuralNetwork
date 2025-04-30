@@ -102,7 +102,7 @@ class CaptchaModel:
         # Колбэки для обучения
         callbacks = [
             ModelCheckpoint(
-                os.path.join(model_dir, 'best_model.h5'),
+                os.path.join(model_dir, 'best_model.keras'),
                 monitor='val_loss',
                 save_best_only=True,
                 verbose=1

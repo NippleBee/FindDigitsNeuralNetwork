@@ -37,7 +37,7 @@ python src/train.py --dataset_dir dataset --model_dir models --epochs 50 --batch
 Для оценки обученной модели на тестовом датасете выполните команду:
 
 ```bash
-python src/inference.py --mode evaluate --model_path models/best_model.h5 --test_dir dataset/test --output_dir results
+python src/inference.py --mode evaluate --model_path models/best_model.keras --test_dir dataset/test --output_dir results
 ```
 
 Параметры:
@@ -52,7 +52,7 @@ python src/inference.py --mode evaluate --model_path models/best_model.h5 --test
 Для распознавания одного изображения капчи выполните команду:
 
 ```bash
-python src/inference.py --mode predict --model_path models/best_model.h5 --image_path path/to/captcha.png
+python src/inference.py --mode predict --model_path models/best_model.keras --image_path path/to/captcha.png
 ```
 
 Параметры:
